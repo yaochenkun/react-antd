@@ -1,6 +1,8 @@
 import './UserHome.css'
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, message} from 'antd';
+import $ from 'jquery';
+import {browserHistory} from 'react-router'
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -8,6 +10,9 @@ class UserHome extends React.Component {
   state = {
     collapsed: false,
     mode: 'inline',
+    username: '',
+    role: '',
+    content: '北京邮电大学姚陈堃'
   };
   onCollapse = (collapsed) => {
     console.log(collapsed);
@@ -16,6 +21,37 @@ class UserHome extends React.Component {
       mode: collapsed ? 'vertical' : 'inline',
     });
   }
+
+  componentDidMount(){
+
+        let token = sessionStorage.getItem('token');
+        $.ajax({
+            url : 'http://localhost:8080/api/member/search/1',
+            type : 'GET',
+            beforeSend: (request) => request.setRequestHeader("token", token),
+            dataType : 'json',
+            success : (result) => {
+
+                console.log(result);
+                if(result.code != "SUCCESS") {
+                    message.error(result.reason);
+                    browserHistory.push('/login');
+                    return;
+                }
+
+                //显示获取到的数据
+                this.setState({
+                    username: sessionStorage.getItem("username"),
+                    role: sessionStorage.getItem("role"),
+                    content: JSON.stringify(result.content)
+                });
+            }
+        });
+
+  }
+
+
+
   render() {
     return (
       <Layout>
@@ -57,7 +93,9 @@ class UserHome extends React.Component {
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb>
             <div style={{ padding: 24, background: '#fff', minHeight: 540 }}>
-              Bill is a cat.
+              <div style={{color:'red'}}>用户名={this.state.username}</div>
+              <div style={{color:'red'}}>角色={this.state.role}</div>
+              <div>拉取member={this.state.content}</div>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

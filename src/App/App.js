@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 class App extends React.Component {
 

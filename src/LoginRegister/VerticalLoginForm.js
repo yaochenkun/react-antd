@@ -1,7 +1,7 @@
-import './Login.css'
+import './LoginRegister.css'
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import { hashHistory } from 'react-router';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
+import { browserHistory } from 'react-router';
 import $ from 'jquery';
 const FormItem = Form.Item;
 
@@ -17,22 +17,25 @@ class VerticalLoginForm_ extends React.Component {
         $.ajax({
             url : 'http://localhost:8080/api/auth/login',
             type : 'POST',
-            // contentType: "application/json; charset=utf-8",
-            data : JSON.stringify({'username':values.username,'password':values.password}),
-            dataType : 'JSON',
-            success : (userInfo) => {
-                console.log(userInfo);
-                // if(userInfo.logon == true) {
-                //
-                //     //保存状态信息
-                //     sessionStorage.setItem("username", userInfo.username);
-                //     sessionStorage.setItem("role", userInfo.role);
-                //     sessionStorage.setItem("logon", userInfo.logon);
-                //
-                //     hashHistory.push('/user_home');
-                // } else {
-                //     alert("登录失败！");
-                // }
+            contentType: 'application/json',
+            data : JSON.stringify({username : values.username, password : values.password}),
+            dataType : 'json',
+            success : (result) => {
+                console.log(result);
+                if(result.code == "SUCCESS") {
+
+                    //保存状态信息
+                    sessionStorage.setItem("token", result.content.token);
+                    sessionStorage.setItem("username", result.content.username);
+                    sessionStorage.setItem("role", result.content.role);
+                    sessionStorage.setItem("expiredTime", result.content.duration);
+
+                    message.success(result.reason);
+                    browserHistory.push('/user_home');
+                    return;
+                } else {
+                    message.error(result.reason);
+                }
             }
         });
       }
@@ -40,7 +43,10 @@ class VerticalLoginForm_ extends React.Component {
   }
 
   handleRegister = (e) => {
+      e.preventDefault();
+      let token = sessionStorage.getItem("token");
 
+      browserHistory.push('/register');
   }
 
   render() {

@@ -1,11 +1,10 @@
-import './Login.css'
+import './LoginRegister.css'
 import React from 'react';
 import { Layout,Carousel,Form, Icon, Input, Button, Checkbox} from 'antd';
-import VerticalLoginForm from './VerticalLoginForm'
 const { Header, Content, Sider, Footer} = Layout;
 const FormItem = Form.Item;
 
-class Login extends React.Component {
+class LoginRegister extends React.Component {
   state = {
     collapsed: false,
     mode: 'inline',
@@ -39,7 +38,7 @@ class Login extends React.Component {
                  </Carousel>
               </Content>
               <Sider style={{margin: '50px 0px',padding:'50px 50px', minWidth:'30%', minHeight:540, backgroundColor:'#fff'}}>
-                  <VerticalLoginForm />
+                  {this.props.children}
               </Sider>
           </Layout>
           <Footer style={{ textAlign: 'center'}}>
@@ -50,4 +49,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default LoginRegister;

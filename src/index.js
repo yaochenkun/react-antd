@@ -1,77 +1,56 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App.js';
-import Login from './Login/Login.js';
+import LoginRegister from './LoginRegister/LoginRegister.js';
+import VerticalLoginForm from './LoginRegister/VerticalLoginForm.js';
+import VerticalRegisterForm from './LoginRegister/VerticalRegisterForm.js';
 import UserHome from './UserHome/UserHome.js';
 import $ from 'jquery';
-import {Router, Route, IndexRoute, hashHistory} from 'react-router';
+import {message} from 'antd'
+import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 
 //认证
 var requestAuth = function(nextState, replace){
 
-    // let logon = sessionStorage.getItem("logon");
-    // if(logon == null || logon == false) {
-    //     replace({ pathname: '/login' })
-    // }
-
-
-    // $.ajax({
-    //     url : '/api/member/search/1',
-    //     type : 'get',
-    //     dataType : 'json',
-    //     success : (userInfo) => {
-    //         console.log(userInfo);
-    //
-    //     }
-    // });
-
-    // alert(3);
-    // $.ajax({
-    //     url : 'http://localhost:8080/api/auth/hehe',
-    //     type : 'POST',
-    //     dataType : 'json',
-    //     success : (data) => {
-    //         console.log(data);
-    //         //browserHistory.push('/user_home');
-    //     }
-    // });
+    let token = sessionStorage.getItem("token");
+    if(token == null) {
+        message.error('请先登录');
+        replace({ pathname: '/login' })
+        return;
+    } else {
+        let expiredTime = sessionStorage.getItem("expiredTime"); //获取过期时间戳
+        let now = new Date().getTime();
+        if(now > expiredTime) {
+            clearSession();
+            message.error('已过期请重新登录');
+            replace({ pathname: '/login' })
+        }
+    }
 };
 
+//清空登录状态信息
+var clearSession = function() {
+
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("expiredTime");
+}
 
 
 
 
-ReactDOM.render(<Router history={hashHistory}>
+
+ReactDOM.render(<Router history={browserHistory}>
                     <Route path="/" component={App}>
                         <Route onEnter={requestAuth}>
                             <Route path="/user_home" component={UserHome}/>
                         </Route>
-                        <Route path="/login" component={Login}/>
+                        <Route component={LoginRegister}>
+                            <Route path="/login" component={VerticalLoginForm}/>
+                            <Route path="/register" component={VerticalRegisterForm}/>
+                        </Route>
                     </Route>
                 </Router>
                 , document.getElementById('root'));
-
-
-
-
-// class Yao extends React.Component {
-//
-// render() {
-//     return (
-//         <div>
-//             Hellow sdf
-//         </div>
-//     );
-//   }
-// }
-//
-//
-//
-// ReactDOM.render(<Router history={browserHistory}>
-//                     <Route path="/" component={Yao} />
-//                 </Router>
-//                 , document.getElementById('root'));
-
-// ReactDOM.render(<Yao/>
-//                 , document.getElementById('root'));
