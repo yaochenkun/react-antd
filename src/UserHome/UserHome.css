@@ -1,1 +1,47 @@
 @import '~antd/dist/antd.css';
+
+.menu-item-font {
+  font-size: 11pt;
+}
+
+.phone {
+  float: right;
+  font-size:12pt;
+  margin-right:10px;
+}
+
+
+.avatar {
+  float: right;
+  background-color: white;
+  margin-top: 11px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.trigger:hover {
+  color: #108ee9;
+}
+
+.logo {
+  height: 32px;
+  background: #333;
+  border-radius: 6px;
+  margin: 16px;
+}
+
+.ant-layout-sider-collapsed .anticon {
+  font-size: 16px;
+}
+
+.ant-layout-sider-collapsed .nav-text {
+  display: none;
+}

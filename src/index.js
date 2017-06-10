@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App/App.js';
-import LoginRegister from './LoginRegister/LoginRegister.js';
-import VerticalLoginForm from './LoginRegister/VerticalLoginForm.js';
-import VerticalRegisterForm from './LoginRegister/VerticalRegisterForm.js';
+import Login from './Login/Login.js';
+import Register from './Register/Register.js';
 import UserHome from './UserHome/UserHome.js';
 import $ from 'jquery';
 import {message} from 'antd'
@@ -33,7 +32,7 @@ var requestAuth = function(nextState, replace){
 var clearSession = function() {
 
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("phone");
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("expiredTime");
 }
@@ -47,10 +46,8 @@ ReactDOM.render(<Router history={browserHistory}>
                         <Route onEnter={requestAuth}>
                             <Route path="/user_home" component={UserHome}/>
                         </Route>
-                        <Route component={LoginRegister}>
-                            <Route path="/login" component={VerticalLoginForm}/>
-                            <Route path="/register" component={VerticalRegisterForm}/>
-                        </Route>
+                        <Route path="/login" component={Login}/>
+                        <Route path="/register" component={Register}/>
                     </Route>
                 </Router>
                 , document.getElementById('root'));
